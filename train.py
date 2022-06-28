@@ -8,12 +8,11 @@ import pytorch_lightning as pl
 
 if __name__ == "__main__" : 
 
-
     root = "/Users/kunwoona/Desktop/Projects/Datasets/face2anime"       # write your own directory here! 
     lambda_recon = 100  
     n_epochs =40 
-    display_step = 2
-    batch_size = 4
+    display_step = 1
+    batch_size = 1
     lr = 0.0003
     target_size = 256 
     device = "mps"
@@ -23,6 +22,6 @@ if __name__ == "__main__" :
 
     cycleGAN = CycleGAN(3, 3, learning_rate= lr, \
         lambda_ = lambda_recon, display_step=display_step)
-    trainer = pl.Trainer(max_epochs = 40, accelerator = "mps", devices = 1)
-
+    #trainer = pl.Trainer(max_epochs = 40, accelerator = "mps", devices = 1)
+    trainer = pl.Trainer(max_epochs = 10)
     trainer.fit(cycleGAN, dataloader)

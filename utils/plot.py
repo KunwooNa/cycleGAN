@@ -6,7 +6,7 @@ import os
 def display_progress(real_image, fake_image, figsize = (12, 6)) : 
     real_image = real_image.detach().cpu().permute(1, 2, 0)
     fake_image = fake_image.detach().cpu().permute(1, 2, 0)
-    fig, ax = plt.subplot(1, 2, figsize = figsize)
+    fig, ax = plt.subplots(1, 2, figsize = figsize)
     ax[0].imshow(real_image)
     ax[1].imshow(fake_image)
     #ax[0].title.set_text('Input image')

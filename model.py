@@ -46,6 +46,7 @@ class CycleGAN(pl.LightningModule) :
     ### TODO : take use of this functionality! ###
     ##############################################
 
+    '''
     def set_input(self, input):
         """Unpack input data from the dataloader and perform necessary pre-processing steps.
         Paramete    rs:
@@ -56,7 +57,7 @@ class CycleGAN(pl.LightningModule) :
         self.real_X = input['X' if XtoY else 'Y'].to(self.device)
         self.real_Y = input['Y' if XtoY else 'X'].to(self.device)
         # self.image_paths = input['A_paths' if XtoY else 'B_paths']
-    
+    '''
 
 
     def _G_step(self, image_X, image_Y) :
@@ -120,14 +121,14 @@ class CycleGAN(pl.LightningModule) :
             loss = self._D_Y_step(image_Y)
             self.log('Discriminator Y loss', loss)
         
-        if self.current_epoch % self.display_step == 0 and batch_idx == 0 and optimizer_idx ==0 : 
+        if self.current_epoch % self.display_step == 0 and batch_idx == 0 and optimizer_idx == 0 : 
             fake_image = self.G(image_X).detach()
             display_progress(image_X[0], fake_image[0])
         
         ############  Save the result!  ############
-        fake_X = self.F(image_Y).detach()
-        fake_Y = self.G(image_X).detach()
-        save_image(fake_X, self.current_epoch, False)
-        save_image(fake_Y, self.current_epoch, True)
+        #fake_X = self.F(image_Y).detach()
+        #fake_Y = self.G(image_X).detach()
+        #save_image(fake_X, self.current_epoch, False)
+        #save_image(fake_Y, self.current_epoch, True)
 
         return loss 
