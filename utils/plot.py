@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 
-
-
 def display_progress(real_image, fake_image, path, \
     figsize = (12, 6)) : 
     real_image = real_image.detach().cpu()
