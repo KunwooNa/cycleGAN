@@ -4,7 +4,7 @@ import torch.nn.functional as F
 import pytorch_lightning as pl 
 
 from buffer import ImageBuffer
-from cycleGAN.utils.plot import save_image
+from utils.plot import save_image
 from network import Generator, Discriminator
 from utils.get_data import CustomDataset
 from utils.plot import display_progress
@@ -58,7 +58,7 @@ class CycleGAN(pl.LightningModule) :
         # self.image_paths = input['A_paths' if XtoY else 'B_paths']
     
 
-    
+
     def _G_step(self, image_X, image_Y) :
         fake_images = self.G(image_X)
         D_Y_logits = self.D_Y(fake_images)

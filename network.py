@@ -5,6 +5,7 @@ from blocks import BasicBlock
 
 class Generator(nn.Module) : 
     def __init__(self, in_channels, out_channels) : 
+        super().__init__()
         self.encoders = nn.ModuleList([
             BasicBlock(in_channels, 64, upsample = False, batchnorm = True), 
             BasicBlock(64, 128, upsample = False), 
@@ -17,12 +18,12 @@ class Generator(nn.Module) :
         ])
 
         self.decoders = nn.ModuleList([
-            BasicBlock(512, 512, dropout = True), 
-            BasicBlock(512 * 2, 512, dropout = True), 
-            BasicBlock(512 * 2, 512, dropout = True),
-            BasicBlock(512 * 2, 256, dropout = True), 
-            BasicBlock(256 * 2, 128), 
-            BasicBlock(128 * 2, 64) 
+            BasicBlock(512, 512, dropout = True, upsample=True), 
+            BasicBlock(512 * 2, 512, dropout = True, upsample=True), 
+            BasicBlock(512 * 2, 512, dropout = True, upsample=True),
+            BasicBlock(512 * 2, 256, dropout = True, upsample=True), 
+            BasicBlock(256 * 2, 128, upsample = True), 
+            BasicBlock(128 * 2, 64, upsample = True) 
         ])
 
         self.decoder_final = nn.ConvTranspose2d(64 * 2, out_channels, \
