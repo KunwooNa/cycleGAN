@@ -1,11 +1,10 @@
 import torch 
 import torch.nn as nn 
-from abc import ABC
 
 
-class BasicModule(nn.Module, ABC) : 
+class BasicBlock(nn.Module) : 
     def __init__(self, in_channels, out_channels, upsample, \
-        kernel_size = 4, stride = 2, padding = 1, activation = True, batchnorm = True, dropout = False, ) : 
+        kernel_size = 4, stride = 2, padding = 1, activation = True, batchnorm = True, dropout = False) : 
         super().__init__()
         self.activation = activation 
         self.batchnorm = batchnorm 
