@@ -1,4 +1,7 @@
 import matplotlib.pyplot as plt
+import torch, torchvision
+import torch.nn as nn 
+import os 
 
 def display_progress(real_image, fake_image, path, \
     figsize = (12, 6)) : 
@@ -12,3 +15,14 @@ def display_progress(real_image, fake_image, path, \
     plt.axis('off')
     plt.show()
     plt.savefig(path)
+
+
+
+def save_image(image, epoch, XtoY : bool) : 
+    if not(os.path.isdir('/ImageOutput')):
+        os.mkdir('/ImageOutput')
+    
+    if XtoY :
+        torchvision.utils.save_image(image, f"/ImageOutput/XtoY{epoch}.png") 
+    else : 
+        torchvision.utils.save_image(image, f"/ImageOutput/YtoX{epoch}.png" )
