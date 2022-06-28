@@ -4,12 +4,16 @@ import torch.nn.functional as F
 import pytorch_lightning as pl 
 
 from buffer import ImageBuffer
+from cycleGAN.utils.plot import save_image
 from network import Generator, Discriminator
 from utils.get_data import CustomDataset
 from utils.plot import display_progress
-from utils.weight import initiate_weight 
+# from utils.weight import initiate_weight 
 
 
+###################################################
+## TODO : apply 'initiate_weight' functionality! ##
+###################################################
 
 class CycleGAN(pl.LightningModule) :
 
@@ -23,6 +27,7 @@ class CycleGAN(pl.LightningModule) :
         self.F = Generator(out_channels, in_channels)
         self.D_X = Discriminator(in_channels)
         self.D_Y = Discriminator(out_channels)
+
         self.loss_GAN = nn.BCEWithLogitsLoss()
         self.loss_cyc = nn.L1Loss()
 
@@ -37,11 +42,10 @@ class CycleGAN(pl.LightningModule) :
         self.fake_X = self.F(image_Y)
         self.recon_Y = self.G(self.fake_X)
     
-
     ##############################################
     ### TODO : take use of this functionality! ###
     ##############################################
-    
+
     def set_input(self, input):
         """Unpack input data from the dataloader and perform necessary pre-processing steps.
         Paramete    rs:
@@ -52,12 +56,8 @@ class CycleGAN(pl.LightningModule) :
         self.real_X = input['X' if XtoY else 'Y'].to(self.device)
         self.real_Y = input['Y' if XtoY else 'X'].to(self.device)
         # self.image_paths = input['A_paths' if XtoY else 'B_paths']
+    
 
-
-
-    ##########################################################
-    ### Note : be careful implementimg this functionality! ###
-    ##########################################################
     
     def _G_step(self, image_X, image_Y) :
         fake_images = self.G(image_X)
@@ -67,7 +67,6 @@ class CycleGAN(pl.LightningModule) :
         return adversarial_loss + self.lambda_ * cyclic_loss
     
 
-
     def _F_step(self, image_X, image_Y) : 
         fake_images = self.F(image_Y)
         D_X_logits = self.D_X(fake_images)
@@ -76,7 +75,6 @@ class CycleGAN(pl.LightningModule) :
         return adversarial_loss + self.lambda_ * cyclic_loss
 
 
-    ##### Be careful!!!! #####
     def _D_X_step(self, image_X) : 
         #fake_images = self.F(image_Y)
         fake_images = self.fake_X_buffer.query(self.fake_X)
@@ -94,7 +92,6 @@ class CycleGAN(pl.LightningModule) :
         fake_loss = self.loss_GAN(fake_logits, torch.ones_like(fake_logits))
         real_loss = self.loss_GAN(real_logits, torch.zeros_like(real_logits))
         return (fake_loss + real_loss) / 2
-    
 
 
     def configure_optimizers(self):
@@ -125,7 +122,12 @@ class CycleGAN(pl.LightningModule) :
         
         if self.current_epoch % self.display_step == 0 and batch_idx == 0 and optimizer_idx ==0 : 
             fake_image = self.G(image_X).detach()
-            display_progress(image_X[0], fake_image[0], image_Y[0])
+            display_progress(image_X[0], fake_image[0])
         
+        ############  Save the result!  ############
+        fake_X = self.F(image_Y).detach()
+        fake_Y = self.G(image_X).detach()
+        save_image(fake_X, self.current_epoch, False)
+        save_image(fake_Y, self.current_epoch, True)
+
         return loss 
-         
