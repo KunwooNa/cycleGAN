@@ -19,7 +19,7 @@ if __name__ == "__main__" :
     device = "mps"
 
     dataset= CustomDataset(root, mode= "train", unaligned=True)
-    dataloader = DataLoader(dataset, batch_size, shuffle = True)
+    dataloader = DataLoader(dataset, batch_size, shuffle = True, num_workers=8)
 
     cycleGAN = CycleGAN(3, 3, learning_rate= lr, \
         lambda_ = lambda_recon, display_step=display_step)
