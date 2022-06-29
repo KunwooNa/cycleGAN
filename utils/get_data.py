@@ -26,9 +26,10 @@ class CustomDataset(Dataset) :
         self.transforms = transforms.functional.to_tensor
         self.mode = mode
         self.unaligned = unaligned 
-        self.files_X = sorted(glob.glob(os.path.join(root, mode, ('%sA' % mode) + '/*.*')))
-        self.files_Y = sorted(glob.glob(os.path.join(root, mode, ('%sB' % mode) + '/*.*')))
-    
+        self.files_X = sorted(glob.glob(os.path.join(root, mode, ('%sA' % mode) + '/*.*')))[:500]
+        self.files_Y = sorted(glob.glob(os.path.join(root, mode, ('%sB' % mode) + '/*.*')))[:500]
+        print(len(self.files_X))
+        print(len(self.files_Y))
     def __len__(self) : 
         return max(len(self.files_X), len(self.files_Y))
 
